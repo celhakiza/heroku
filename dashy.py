@@ -45,7 +45,7 @@ app.layout=dbc.Container([
                          multi=True,
                          options=[]),
             dcc.Graph(id='indicator-grap',figure={})
-        ],width=12),
+        ],width={'size':5,'offset':1}),
 
     ])
 
@@ -91,7 +91,7 @@ def update_district(province_slctd):
     dff_primary=df_primary[df_primary['Provinces']==province_slctd]
     return ([{'label':x,'value':x} for x in sorted(dff_primary['Districts'].unique())])
     dff_secondary=df_secondary[df_secondary['Provinces']==province_slctd]
-    return ([{'label': x, 'value': x} for x in sorted(dff_secondary['Districts'].unique())])
+    return ([{'label': x,'value': x} for x in sorted(dff_secondary['Districts'].unique())])
 
 #populate initial values
 @app.callback(
@@ -117,7 +117,7 @@ def update_graph(district_slct,province_slct,select_indicators):
         y=['Both sexes','Female','Male'],
         barmode='group')
         fig.update_layout(xaxis_title='Districts', yaxis_title='education status',
-                          title='status of {} in Rwanda'.format(select_indicators))
+                          title='status of {} in {}'.format(select_indicators,province_slct))
         return fig
     elif select_indicators=='employment':
         dff_secondary = df_secondary[(df_secondary['Provinces'] == province_slct) & (df_secondary['Districts'].isin(district_slct))]
@@ -126,9 +126,7 @@ def update_graph(district_slct,province_slct,select_indicators):
         y=['Both sexes', 'Female', 'Male'],
         barmode='group')
         fig.update_layout(xaxis_title='Districts', yaxis_title='education status',
-                          title='status of {} in Rwanda'.format(select_indicators))
+                          title='status of {} in {}'.format(select_indicators,province_slct))
         return fig
-
-#
 
 app.run_server(debug=True, port=3000)
